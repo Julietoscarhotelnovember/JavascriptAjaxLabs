@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>xmlHttpRequest function Base</title>
+<script type="text/javascript">
+	var httpReq=null;
+	function getInstance(){
+		httpReq=new XMLHttpRequest(); //여기에는 많은 사연이 있다
+		return httpReq;
+	}
+	function sendData(){
+		httpReq=getInstance();
+		// 이벤트에 함수를 다이렉트로 붙일때는 괄호 없이
+		httpReq.onreadystatechange=HandlerStatechange;
+		httpReq.open("post", "Ex01_Ajax_resource.html");
+		httpReq.send();
+	}
+	function HandlerStatechange(){
+		if(httpReq.readyState==4){
+			if(httpReq.status>=200&&httpReq.status<300){
+				//서버에서 받은 데이터 처리
+				document.getElementById("container").innerHTML=httpReq.responseText;
+			}
+		}
+	}
+</script>
+</head>
+<body>
+<h3>이미지</h3>
+<img src="https://www.google.co.kr/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png" style="width:150px;height:150px;">
+<h3>비동기 (ajax) 처리</h3>
+<input type="button" value="비동기처리" onclick="sendData()">
+<div id="container">first data loading ...</div>
+<hr>
+<h3>동기식 처리</h3>
+<a href="Ex01_Ajax_resource.html">서버에 데이터 요청</a>
+</body>
+</html>

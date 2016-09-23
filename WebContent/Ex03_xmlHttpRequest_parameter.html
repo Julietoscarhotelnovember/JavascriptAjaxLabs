@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>xmlHttpRequest function Base</title>
+<script type="text/javascript">
+	var httpReq=null;
+	function getInstance(){
+		httpReq=new XMLHttpRequest(); //여기에는 많은 사연이 있다
+		return httpReq;
+	}
+	function sendData(){
+		httpReq=getInstance();
+		// 이벤트에 함수를 다이렉트로 붙일때는 괄호 없이
+		httpReq.onreadystatechange=HandlerStatechange;
+		var keys=document.getElementById("select_menu").selectedIndex;
+		httpReq.open("post", "Ex03_Server_Param.jsp?no="+keys);
+		httpReq.send();
+	}
+	function HandlerStatechange(){
+		if(httpReq.readyState==4){
+			if(httpReq.status>=200&&httpReq.status<300){
+				//서버에서 받은 데이터 처리
+				var TempArray=new Array();
+				TempArray=httpReq.responseText.split(",");
+				var printdata="";
+				for(var i=0; i<TempArray.length; i++){
+					//이걸 처리하는 것이 관건이다..
+					//jquery의 each문으로 하면 좋다
+					printdata+=TempArray[i].trim()+"<br>";
+				}
+				var viewEle=document.getElementById("div_view");
+				viewEle.innerHTML=printdata;
+				//쇼핑몰의 대분류>중분류>소분류와 비슷
+			}
+		}
+	}
+</script>
+</head>
+<body>
+
+<h3>param값 처리하기</h3>
+<div style="background-color: gray;width: 500px;text-align: center;">
+	<hr style="color:red">
+	<select id="select_menu" onchange="sendData()">
+		<option>0번데이터</option>
+		<option>1번데이터</option>
+		<option>2번데이터</option>
+	</select>
+	<span id="div_view"></span>
+</div>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Insert title here</title>
+<script type="text/javascript">
+var httpReq=null;
+function getInstance(){
+	httpReq=new XMLHttpRequest(); //여기에는 많은 사연이 있다
+	return httpReq;
+}
+function sendData(){
+	httpReq=getInstance();
+	// 이벤트에 함수를 다이렉트로 붙일때는 괄호 없이
+	httpReq.onreadystatechange=HandlerStatechange;
+	var keys=document.getElementById("emp").value;
+	httpReq.open("post", "Ex05_EmpDataSearch.jsp?empno="+keys);
+	httpReq.send();
+}
+function HandlerStatechange(){
+	if(httpReq.readyState==4){
+		if(httpReq.status>=200&&httpReq.status<300){
+			//서버에서 받은 데이터 처리
+			document.getElementById("txtdata").innerHTML=httpReq.responseText;
+		}
+	}
+}
+
+</script>
+</head>
+<body>
+<select name="emp" id="emp" onchange="sendData()">
+	<option value="">select empno</option>
+	<option value="7788">scott</option>
+	<option value="7902">ford</option>
+	<option value="7521">ward</option>
+</select>
+<hr>
+<div id="txtdata">emp data load ...</div>
+</body>
+</html>

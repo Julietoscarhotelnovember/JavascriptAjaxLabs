@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Insert title here</title>
+<script>
+var httpReq=null;
+function getInstance(){
+	httpReq=new XMLHttpRequest(); //여기에는 많은 사연이 있다
+	return httpReq;
+}
+function sendData(str){
+	httpReq=getInstance();
+	// 이벤트에 함수를 다이렉트로 붙일때는 괄호 없이
+	httpReq.onreadystatechange=HandlerStatechange;
+	
+	httpReq.open("post", "Ex04_wordSearch.jsp?word="+str);
+	httpReq.send();
+}
+function HandlerStatechange(){
+	if(httpReq.readyState==4){
+		if(httpReq.status>=200&&httpReq.status<300){
+			//서버에 받은 데이터를 처리하는 곳
+  			document.getElementById("txthint").innerHTML = httpReq.responseText;
+		}
+	}
+}
+
+</script>
+</head>
+<body>
+
+<h3>word search</h3>
+<form action="">
+	firstname: <input type="text" id="txt1" onkeyup="sendData(this.value)">
+</form>
+<fieldset>
+	<legend>검색단어</legend>
+	<span id="txthint"></span>
+</fieldset>
+</body>
+</html>
